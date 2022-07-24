@@ -25,7 +25,7 @@ const pathMatchRoute = (route) => {
                     </li>
                     <li className="navbarListItem" onClick={()=> navigate('/offers')}>
                         <OfferIcon fill={pathMatchRoute('/offers') ? "#2c2c2c" : "#8f8f8f"} width="36px" height="36px"/>
-                        <p className={pathMatchRoute('/offers') ? 'navbarListItemNameActive' : 'navbarListItem'}>Offer</p>
+                        <p className={pathMatchRoute('/offers') ? 'navbarListItemNameActive' : 'navbarListItem'}>Offers</p>
                     </li>
                     <li className="navbarListItem" onClick={()=> navigate('/profile')}>
                         <PersonOutline fill={pathMatchRoute('/profile') ? "#2c2c2c" : "#8f8f8f"} width="36px" height="36px"/>
