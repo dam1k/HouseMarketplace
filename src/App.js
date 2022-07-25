@@ -7,7 +7,7 @@ import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
 import ForgotPassword from "./pages/ForgotPassword"
 import Navbar from "./components/Navbar"
-import {ToastContainer, toast} from "react-toastify"
+import {ToastContainer} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import PrivateRoute from "./pages/PrivateRoute"
 import Category from './pages/Category';
@@ -32,7 +32,7 @@ function App() {
         <Route path="/create-listing" element={<CreateListing/>}/>
         <Route path="/category/:categoryName/:listingId" element={<Listing/>}/>
         <Route path="/contact/:landlordId" element={<Contact/>}/>
-        <Route path="./edit-listing/:listingId" element={<EditListing/>}/>
+        <Route path="/edit-listing/:listingId" element={<EditListing/>}/>
       </Routes>
       <Navbar/>
       </Router>

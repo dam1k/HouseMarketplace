@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'     
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import {
   getStorage,
@@ -6,7 +6,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage'
-import {doc, updateDoc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import {doc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase_config'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -55,6 +55,13 @@ function EditListing() {
   const isMounted = useRef(true)
   const params = useParams()
 
+useEffect(()=>{
+if(listing && listing.userRef !== auth.currentUser.uid) {
+  toast.error("You can't edit this listing")
+  navigate('/')
+}
+})
+
   useEffect(() => {
     if (isMounted) {
       onAuthStateChanged(auth, (user) => {
@@ -74,20 +81,21 @@ function EditListing() {
 
   useEffect(()=> {
     setLoading(true)
-    async function fetchListings() {
+    async function fetchListing() {
         const docRef = doc(db, 'listings', params.listingId)
         const docSnap = await getDoc(docRef)
 
         if(docSnap.exists()) {
             setListing(docSnap.data())
-            setFormData({...listing, address: listing.location})
+            setFormData({...docSnap.data(), address: docSnap.data().location})
+            setLoading(false)
         } else {
             navigate('/')
             toast.error('Listing does not exist')
         }
     }
 
-    fetchListings()
+    fetchListing()
 }, [params.listingId, navigate])
 
   const onSubmit = async (e) => {
@@ -196,7 +204,8 @@ function EditListing() {
     delete formDataCopy.address
     !formDataCopy.offer && delete formDataCopy.discountedPrice
 
-    const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
+    const docRef = doc(db, 'listings', params.listingId)
+    await updateDoc(docRef, formDataCopy)
     setLoading(false)
     toast.success('Listing saved')
     navigate(`/category/${formDataCopy.type}/${docRef.id}`)
